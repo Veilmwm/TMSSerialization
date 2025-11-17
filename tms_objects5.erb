@@ -867,8 +867,8 @@ FileUtils.rm_rf('records')
 FileUtils.mkdir('records')
 
 #ITERATING THROUGH OBJECTS
-objects_main_query = tmsclient.execute("SELECT * FROM [Coboat_ObjectsMainQuery]").each
-#objects_main_query = tmsclient.execute("SELECT * FROM [Coboat_ObjectsMainQuery] where ObjectID in (22,6236,515)").each
+#objects_main_query = tmsclient.execute("SELECT * FROM [Coboat_ObjectsMainQuery]").each
+objects_main_query = tmsclient.execute("SELECT * FROM [Coboat_ObjectsMainQuery] where ObjectID in (22,6236,515)").each
 #objects_main_query = tmsclient.execute("SELECT * FROM [Coboat_ObjectsMainQuery] where ObjectID in (61579,755,1491)").each
 #objects_main_query = tmsclient.execute("SELECT * FROM [Coboat_ObjectsMainQuery] where ObjectID in (212,755)").each
 #objects_main_query = tmsclient.execute("SELECT * FROM [Coboat_ObjectsMainQuery] where ObjectID in (1832,958,61579)").each
@@ -1209,6 +1209,8 @@ oaiSetsH = Hash.new { |hash, key| hash[key] = [] }
   DBR = SQLite3::Database.new 'tms_serialization.db'
   DBR.execute "DELETE FROM record_set_map"
   DBR.execute "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'record_set_map'"
+  DBR.execute "DELETE FROM metadata_record"
+  DBR.execute "UPDATE sqlite_sequence SET seq = 0 WHERE name = 'metadata_record'"
 
 objects_main_query.each_with_index do |r, index|
 #  m_lidoRecID = ERB.new(t_lidoRecID, trim_mode: "%<>")
