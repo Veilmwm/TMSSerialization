@@ -54,7 +54,7 @@ class OaiController < ApplicationController
       return
     end
 
-    render xml: build_response do |xml|
+    render xml: build_response { |xml|
       xml.Identify do
         xml.repositoryName REPOSITORY_NAME
         xml.baseURL BASE_URL
@@ -64,7 +64,7 @@ class OaiController < ApplicationController
         xml.deletedRecord "no"
         xml.granularity "YYYY-MM-DDThh:mm:ssZ"
       end
-    end
+    }
   end
 
   def list_metadata_formats
@@ -83,7 +83,7 @@ class OaiController < ApplicationController
       return
     end
 
-    render xml: build_response do |xml|
+    render xml: build_response { |xml|
       xml.ListMetadataFormats do
         SUPPORTED_FORMATS.each do |prefix, format_info|
           xml.metadataFormat do
@@ -93,7 +93,7 @@ class OaiController < ApplicationController
           end
         end
       end
-    end
+    }
   end
 
   def list_sets
@@ -116,7 +116,7 @@ class OaiController < ApplicationController
       { spec: "set2", name: "Sample Set 2", description: "This is the second sample set" }
     ]
 
-    render xml: build_response do |xml|
+    render xml: build_response { |xml|
       xml.ListSets do
         sets.each do |set|
           xml.set do
@@ -132,7 +132,7 @@ class OaiController < ApplicationController
           end
         end
       end
-    end
+    }
   end
 
   def list_identifiers
@@ -176,7 +176,7 @@ class OaiController < ApplicationController
     # Sample records
     records = sample_records
 
-    render xml: build_response do |xml|
+    render xml: build_response { |xml|
       xml.ListIdentifiers do
         records.each do |record|
           xml.header do
@@ -186,7 +186,7 @@ class OaiController < ApplicationController
           end
         end
       end
-    end
+    }
   end
 
   def list_records
@@ -230,7 +230,7 @@ class OaiController < ApplicationController
     # Sample records
     records = sample_records
 
-    render xml: build_response do |xml|
+    render xml: build_response { |xml|
       xml.ListRecords do
         records.each do |record|
           xml.record do
@@ -245,7 +245,7 @@ class OaiController < ApplicationController
           end
         end
       end
-    end
+    }
   end
 
   def get_record
@@ -285,7 +285,7 @@ class OaiController < ApplicationController
     # Find the record
     record = find_record(identifier)
 
-    render xml: build_response do |xml|
+    render xml: build_response { |xml|
       xml.GetRecord do
         xml.record do
           xml.header do
@@ -298,7 +298,7 @@ class OaiController < ApplicationController
           end
         end
       end
-    end
+    }
   end
 
   # Helper methods
@@ -309,7 +309,7 @@ class OaiController < ApplicationController
 
   def build_response
     Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
-      xml['OAI-PMH'].send(:'OAI-PMH',
+      xml.send(:'OAI-PMH',
         'xmlns' => 'http://www.openarchives.org/OAI/2.0/',
         'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
         'xsi:schemaLocation' => 'http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd') do
@@ -323,13 +323,13 @@ class OaiController < ApplicationController
   end
 
   def render_error(code, message)
-    render xml: build_response do |xml|
+    render xml: build_response { |xml|
       xml.error(message, code: code)
-    end
+    }
   end
 
   def has_illegal_arguments?(allowed_params)
-    actual_params = params.keys - ["controller", "action"]
+    actual_params = params.keys - ["controller", "action", "format"]
     (actual_params - allowed_params).any?
   end
 
