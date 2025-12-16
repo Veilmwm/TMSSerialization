@@ -11,7 +11,8 @@ class OaiController < ApplicationController
      "lido" => {
        schema: "http://www.lido-schema.org/schema/v1.0/lido-v1.0.xsd",
        namespace: "http://www.lido-schema.org"
-     },
+      }
+    }
 
   def index
     @verb = params[:verb]
