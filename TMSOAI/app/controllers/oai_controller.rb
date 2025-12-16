@@ -1,22 +1,17 @@
 class OaiController < ApplicationController
   before_action :set_response_format
 
-  REPOSITORY_NAME = "Sample OAI-PMH Repository"
+  REPOSITORY_NAME = "YCBA TMS LIDO OAI-PMH"
   BASE_URL = "http://localhost:3000/oai"
   ADMIN_EMAIL = "admin@example.com"
   EARLIEST_DATESTAMP = "2020-01-01T00:00:00Z"
   PROTOCOL_VERSION = "2.0"
 
   SUPPORTED_FORMATS = {
-    "oai_dc" => {
-      schema: "http://www.openarchives.org/OAI/2.0/oai_dc.xsd",
-      namespace: "http://www.openarchives.org/OAI/2.0/oai_dc/"
-    },
-    "oai_marc" => {
-      schema: "http://www.openarchives.org/OAI/2.0/oai_marc.xsd",
-      namespace: "http://www.openarchives.org/OAI/2.0/oai_marc/"
-    }
-  }
+     "lido" => {
+       schema: "http://www.lido-schema.org/schema/v1.0/lido-v1.0.xsd",
+       namespace: "http://www.lido-schema.org"
+     },
 
   def index
     @verb = params[:verb]
