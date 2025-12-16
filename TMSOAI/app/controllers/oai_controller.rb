@@ -103,8 +103,9 @@ class OaiController < ApplicationController
 
     # Sample sets
     sets = [
-      { spec: "set1", name: "Sample Set 1", description: "This is the first sample set" },
-      { spec: "set2", name: "Sample Set 2", description: "This is the second sample set" }
+      { spec: "ycba%3Aframes", name: "YCBA frame collection", description: "YCBA frame collection" },
+      { spec: "ycba%3Apd", name: "Prints and Drawings", description: "Prints and Drawings" },
+      { spec: "ycba%3Aps", name: "Paintings and Sculpture", description: "Paintings and Sculpture" }
     ]
 
     render xml: build_response { |xml|

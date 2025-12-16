@@ -47,25 +47,25 @@ RSpec.describe OaiController, type: :controller do
       it "returns two sample sets" do
         sets = response_xml.xpath("//xmlns:set",
           'xmlns' => 'http://www.openarchives.org/OAI/2.0/')
-        expect(sets.count).to eq(2)
+        expect(sets.count).to eq(3)
       end
 
       it "includes setSpec elements for each set" do
         set_specs = response_xml.xpath("//xmlns:setSpec",
           'xmlns' => 'http://www.openarchives.org/OAI/2.0/')
-        expect(set_specs.map(&:text)).to contain_exactly("set1", "set2")
+        expect(set_specs.map(&:text)).to contain_exactly("ycba%3Aframes", "ycba%3Apd","ycba%3Aps")
       end
 
       it "includes setName elements for each set" do
         set_names = response_xml.xpath("//xmlns:setName",
           'xmlns' => 'http://www.openarchives.org/OAI/2.0/')
-        expect(set_names.map(&:text)).to contain_exactly("Sample Set 1", "Sample Set 2")
+        expect(set_names.map(&:text)).to contain_exactly("YCBA frame collection", "Prints and Drawings","Paintings and Sculpture")
       end
 
       it "includes setDescription elements with proper namespace" do
         set_descriptions = response_xml.xpath("//xmlns:setDescription",
           'xmlns' => 'http://www.openarchives.org/OAI/2.0/')
-        expect(set_descriptions.count).to eq(2)
+        expect(set_descriptions.count).to eq(3)
 
         # Check Dublin Core namespace is present in setDescription
         set_descriptions.each do |desc|
@@ -79,8 +79,9 @@ RSpec.describe OaiController, type: :controller do
           'xmlns' => 'http://www.openarchives.org/OAI/2.0/',
           'dc' => 'http://purl.org/dc/elements/1.1/')
         expect(descriptions.map(&:text)).to contain_exactly(
-          "This is the first sample set",
-          "This is the second sample set"
+          "YCBA frame collection",
+          "Prints and Drawings",
+          "Paintings and Sculpture"
         )
       end
 
@@ -93,20 +94,20 @@ RSpec.describe OaiController, type: :controller do
         it "has correct setSpec" do
           spec = first_set.xpath("xmlns:setSpec",
             'xmlns' => 'http://www.openarchives.org/OAI/2.0/').first
-          expect(spec.text).to eq("set1")
+          expect(spec.text).to eq("ycba%3Aframes")
         end
 
         it "has correct setName" do
           name = first_set.xpath("xmlns:setName",
             'xmlns' => 'http://www.openarchives.org/OAI/2.0/').first
-          expect(name.text).to eq("Sample Set 1")
+          expect(name.text).to eq("YCBA frame collection")
         end
 
         it "has correct setDescription" do
           desc = first_set.xpath("xmlns:setDescription/dc:description",
             'xmlns' => 'http://www.openarchives.org/OAI/2.0/',
             'dc' => 'http://purl.org/dc/elements/1.1/').first
-          expect(desc.text).to eq("This is the first sample set")
+          expect(desc.text).to eq("YCBA frame collection")
         end
       end
     end
