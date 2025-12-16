@@ -93,14 +93,9 @@ class OaiController < ApplicationController
   end
 
   def list_sets
-    # Check for resumptionToken exclusivity
-    if params[:resumptionToken].present? && params.except(:verb, :resumptionToken, :controller, :action).any?
-      render_error("badArgument", "resumptionToken cannot be combined with other arguments")
-      return
-    end
 
     # Check for illegal arguments
-    allowed = ["verb", "resumptionToken"]
+    allowed = ["verb"]
     if has_illegal_arguments?(allowed)
       render_error("badArgument", "The request includes illegal arguments")
       return
@@ -118,12 +113,9 @@ class OaiController < ApplicationController
           xml.set do
             xml.setSpec set[:spec]
             xml.setName set[:name]
-            xml.setDescription do
-              xml.tag!("oai_dc:dc",
-                "xmlns:oai_dc" => "http://www.openarchives.org/OAI/2.0/oai_dc/",
-                "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
-                xml.tag!("dc:description", set[:description])
-              end
+            xml.setDescription("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
+              "xsi:schemaLocation" => "http://purl.org/dc/elements/1.1/ http://dublincore.org/schemas/xmls/simpledc20021212.xsd") do
+              xml['dc'].description(set[:description])
             end
           end
         end
@@ -139,7 +131,7 @@ class OaiController < ApplicationController
     end
 
     # Check for resumptionToken exclusivity
-    if params[:resumptionToken].present? && params.except(:verb, :resumptionToken, :controller, :action).any?
+    if params[:resumptionToken].present? && params.except(:verb, :resumptionToken, :controller, :action).keys.any?
       render_error("badArgument", "resumptionToken cannot be combined with other arguments")
       return
     end
@@ -193,7 +185,7 @@ class OaiController < ApplicationController
     end
 
     # Check for resumptionToken exclusivity
-    if params[:resumptionToken].present? && params.except(:verb, :resumptionToken, :controller, :action).any?
+    if params[:resumptionToken].present? && params.except(:verb, :resumptionToken, :controller, :action).keys.any?
       render_error("badArgument", "resumptionToken cannot be combined with other arguments")
       return
     end
