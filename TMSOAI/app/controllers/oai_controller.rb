@@ -108,8 +108,9 @@ class OaiController < ApplicationController
 
     # Sample sets
     sets = [
-      { spec: "set1", name: "Sample Set 1", description: "This is the first sample set" },
-      { spec: "set2", name: "Sample Set 2", description: "This is the second sample set" }
+      { spec: "ycba%3Aframes", name: "YCBA frame collection", description: "YCBA frame collection" },
+      { spec: "ycba%3Apd", name: "Prints and Drawings", description: "Prints and Drawings" }
+      { spec: "ycba%3Aps", name: "Paintings and Sculpture", description: "Paintings and Sculpture" }
     ]
 
     render xml: build_response { |xml|
@@ -118,12 +119,9 @@ class OaiController < ApplicationController
           xml.set do
             xml.setSpec set[:spec]
             xml.setName set[:name]
-            xml.setDescription do
-              xml.tag!("oai_dc:dc",
-                "xmlns:oai_dc" => "http://www.openarchives.org/OAI/2.0/oai_dc/",
-                "xmlns:dc" => "http://purl.org/dc/elements/1.1/") do
-                xml.tag!("dc:description", set[:description])
-              end
+            xml.setDescription! ("xmlns:dc" => "http://purl.org/dc/elements/1.1/",
+              "xsi:schemaLocation" => "http://purl.org/dc/elements/1.1/ http://dublincore.org/schemas/xmls/simpledc20021212.xsd") do
+              xml.setDescription!("dc:description", set[:description])
             end
           end
         end
