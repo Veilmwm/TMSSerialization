@@ -10,7 +10,7 @@ class OaiController < ApplicationController
   SUPPORTED_FORMATS = {
      "lido" => {
        schema: "http://www.lido-schema.org/schema/v1.0/lido-v1.0.xsd",
-       namespace: "lido=http://www.lido-schema.org"
+       namespace: "http://www.lido-schema.org"
      },
 
   def index
